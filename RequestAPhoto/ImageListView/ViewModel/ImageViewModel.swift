@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 class ImageViewModel : ObservableObject {
-    @Published var images : [Image] = []
+    @Published var images : [ImageData] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     private var currentPage: Int = 1
@@ -27,7 +27,7 @@ class ImageViewModel : ObservableObject {
 
         URLSession.shared.dataTaskPublisher(for: url)
             .map {$0.data}
-            .decode(type: [Image].self, decoder: JSONDecoder())
+            .decode(type: [ImageData].self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 self.isLoading = false

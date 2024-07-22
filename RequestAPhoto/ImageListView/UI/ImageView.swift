@@ -16,6 +16,7 @@ struct ImageView: View {
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 110, height: 110)
                         .clipped()
+                        .cornerRadius(10)
                 } placeholder: {
                     ProgressView()
                 }

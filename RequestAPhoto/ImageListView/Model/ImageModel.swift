@@ -8,8 +8,8 @@
 import Foundation
 
 
-struct Image : Decodable, Identifiable, Equatable {
-    static func == (lhs: Image, rhs: Image) -> Bool {
+struct ImageData : Decodable, Identifiable, Equatable {
+    static func == (lhs: ImageData, rhs: ImageData) -> Bool {
         return lhs.id == rhs.id && lhs.urls == rhs.urls
     }
     
