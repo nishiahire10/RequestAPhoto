@@ -16,16 +16,19 @@ class ImageViewModel : ObservableObject {
     private var totalPages: Int = 1
     
     private var cancellables = Set<AnyCancellable>()
-    
+    var urlSession: URLSessionProtocol = URLSession.shared
+
     func fetchImages() {
-        guard let url = URL(string: "https://api.unsplash.com/photos?page=\(currentPage)&per_page=10&client_id=TQrbR8WqGXApbhue3ysLsJTdFE4uBtZWy4Zq-g6eBuw") else { return }
+        guard let url = URL(string: "https://api.unsplash.com/photos?page=\(currentPage)&per_page=10&client_id=TQrbR8WqGXApbhue3ysLsJTdFE4uBtZWy4Zq-g6eBuw55") else { return }
         guard !isLoading, currentPage <= totalPages else { return }
 
+        isLoading = true
+        
+        if errorMessage != nil {
+                errorMessage = nil
+            }
 
-               isLoading = true
-               errorMessage = nil
-
-        URLSession.shared.dataTaskPublisher(for: url)
+        urlSession.customDataTaskPublisher(for: url)
             .map {$0.data}
             .decode(type: [ImageData].self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
@@ -45,6 +48,7 @@ class ImageViewModel : ObservableObject {
             }, receiveValue: { images in
                 self.currentPage += 1
                 self.totalPages = self.currentPage + 1
+                print(images)
                 self.images.append(contentsOf: images)
             })
             .store(in: &cancellables)
@@ -73,3 +77,10 @@ class ImageViewModel : ObservableObject {
 }
 
 
+extension URLSession: URLSessionProtocol {
+    func customDataTaskPublisher(for url: URL) -> AnyPublisher<(data: Data, response: URLResponse), URLError> {
+            return self.dataTaskPublisher(for: url)
+                .mapError { $0 as URLError }
+                .eraseToAnyPublisher()
+    }
+}

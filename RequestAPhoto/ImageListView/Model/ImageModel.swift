@@ -8,13 +8,7 @@
 import Foundation
 
 
-struct ImageData : Decodable, Identifiable, Equatable {
-    static func == (lhs: ImageData, rhs: ImageData) -> Bool {
-        return lhs.id == rhs.id && lhs.urls == rhs.urls
-    }
-    
-    
-    
+struct ImageData : Codable, Identifiable {
     var id : String
     var slug : String
     var alternative_slugs : [String:String]?
@@ -38,13 +32,13 @@ struct ImageData : Decodable, Identifiable, Equatable {
     var asset_type : String?
     var user : Sponsor?
 }
-struct Breadcrumbs : Decodable {
+struct Breadcrumbs : Codable {
     var slug : String?
     var title : String?
     var index : Int?
     var type : String?
 }
-struct URLModel : Decodable, Equatable {
+struct URLModel : Codable {
     var raw : String?
     var full : String?
     var regular : String?
@@ -53,14 +47,14 @@ struct URLModel : Decodable, Equatable {
     var small_s3 : String?
 }
 
-struct Sponsorship : Decodable {
+struct Sponsorship : Codable {
     var impression_urls : [String]?
     var tagline : String?
     var tagline_url : String?
     var sponsor : Sponsor?
 }
 
-struct Sponsor : Decodable {
+struct Sponsor : Codable {
     var id : String
     var updated_at : String?
     var username : String?
